@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the software and the paper."
+title: "MDRG: Graph-Riemannian Multi-View Fusion for EEG Imagined Speech Decoding"
+abstract: >-
+  Subject-specific decoder for the five-command BCIC2020-IV imagined speech
+  benchmark, combining a compact temporal-spatial CNN with a 1656-dimensional
+  multi-view descriptor, evaluated on the official held-out test split.
+authors:
+  - family-names: Duhair
+    given-names: "Hatem T. M."
+  - family-names: "bin Mat Ibrahim"
+    given-names: Masrullizam
+  - family-names: Alsayaydeh
+    given-names: "Jamil Abedalrahim Jamil"
+  - family-names: Farid
+    given-names: Mazen
+license: MIT
+repository-code: "https://github.com/<your-account>/mdrg-bcic2020iv"
+keywords:
+  - EEG
+  - imagined speech
+  - brain-computer interface
+  - Riemannian geometry
+  - evaluation protocol
