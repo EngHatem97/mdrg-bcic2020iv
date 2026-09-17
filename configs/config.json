@@ -1,7 +1,7 @@
 {
   "_comment": "Every value here corresponds to Table 4 of the paper. Edit paths.dataset_root before running anything.",
   "paths": {
-    "dataset_root": "/content/drive/My Drive/MyDatasets/dataset C",
+    "dataset_root": "/path/to/your/copy/of/dataset C",
     "_note": "Must contain 'Training Set', 'Validation Set' and 'Testing Set' subfolders of BCIC2020-IV Track 3."
   },
   "protocol": {
