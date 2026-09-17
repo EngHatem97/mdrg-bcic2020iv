@@ -1,0 +1,109 @@
+{
+  "regions": {
+    "L_Prefrontal": [
+      "Fp1",
+      "AF3",
+      "AF7"
+    ],
+    "R_Prefrontal": [
+      "Fp2",
+      "AF4",
+      "AF8"
+    ],
+    "L_Frontal": [
+      "F3",
+      "F5",
+      "F7"
+    ],
+    "M_Frontal": [
+      "Fz",
+      "F1",
+      "F2"
+    ],
+    "R_Frontal": [
+      "F4",
+      "F6",
+      "F8"
+    ],
+    "L_Frontocentral": [
+      "FC1",
+      "FC3",
+      "FC5"
+    ],
+    "R_Frontocentral": [
+      "FC2",
+      "FC4",
+      "FC6"
+    ],
+    "L_Temporal": [
+      "FT7",
+      "T7",
+      "TP9"
+    ],
+    "R_Temporal": [
+      "FT8",
+      "T8",
+      "TP10"
+    ],
+    "Central": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "Cz",
+      "C5",
+      "C6"
+    ],
+    "L_Centroparietal": [
+      "CP1",
+      "CP3",
+      "CP5"
+    ],
+    "M_Centroparietal": [
+      "CPz",
+      "Pz"
+    ],
+    "R_Centroparietal": [
+      "CP2",
+      "CP4",
+      "CP6"
+    ],
+    "L_Parietal": [
+      "P1",
+      "P3",
+      "P5",
+      "P7"
+    ],
+    "R_Parietal": [
+      "P2",
+      "P4",
+      "P6",
+      "P8"
+    ],
+    "L_Occipital": [
+      "O1",
+      "PO3",
+      "PO7",
+      "PO9"
+    ],
+    "M_Occipital": [
+      "Oz",
+      "POz"
+    ],
+    "R_Occipital": [
+      "O2",
+      "PO4",
+      "PO8",
+      "PO10"
+    ]
+  },
+  "unassigned_channels": [
+    "FT9",
+    "FT10",
+    "TP7",
+    "TP8"
+  ],
+  "n_assigned": 60,
+  "n_recorded": 64,
+  "note": "The 18 regions are disjoint and cover 60 of the 64 recorded channels. The four unassigned channels feed the raw EEG branch, which uses all 64, but not the MDRG branch."
+}
