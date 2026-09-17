@@ -1,0 +1,61 @@
+{
+  "model_id": "brain-bzh/reve-base",
+  "model_revision": "dc2a075c287bb2f6c04ee5875bd79535a0f7dba6",
+  "position_id": "brain-bzh/reve-positions",
+  "position_revision": "befa5b57a455b77cf302daf610c2e9ed8140bace",
+  "seed": 42,
+  "input_protocol": {
+    "source": "original Track-3 MATLAB EEG",
+    "original_samples": 795,
+    "kept": "last 768 samples",
+    "resampled_samples": 600,
+    "target_fs_hz": 200,
+    "scale_factor": 1000,
+    "channels": 64
+  },
+  "linear_probe": {
+    "max_epochs": 100,
+    "patience": 15,
+    "warmup_epochs": 3,
+    "lr": 0.005,
+    "dropout": 0.05,
+    "mixup": true,
+    "effective_batch_target": 64
+  },
+  "lora": {
+    "implementation": "direct LoRA wrapper; no PEFT/torchao",
+    "rank": 16,
+    "alpha": 16.0,
+    "targets": [
+      "to_qkv",
+      "to_out"
+    ],
+    "max_epochs": 200,
+    "patience": 15,
+    "warmup_epochs": 5,
+    "lr": 0.0001,
+    "dropout": 0.5,
+    "effective_batch_target": 64
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "betas": [
+      0.92,
+      0.999
+    ],
+    "eps": 1e-09,
+    "weight_decay": 0.01
+  },
+  "scheduler": {
+    "name": "ReduceLROnPlateau",
+    "factor": 0.5,
+    "patience": 5
+  },
+  "gradient_clip": 2.0,
+  "selection_metric": "validation accuracy",
+  "test_used_for_selection": false,
+  "published_REVE_context_not_directly_comparable": {
+    "BCI2020_3_accuracy_model_card": 0.5635,
+    "BCII2020_3_LP_accuracy_model_card": 0.39
+  }
+}

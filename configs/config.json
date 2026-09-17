@@ -1,0 +1,238 @@
+{
+  "_comment": "Every value here corresponds to Table 4 of the paper. Edit paths.dataset_root before running anything.",
+  "paths": {
+    "dataset_root": "/content/drive/My Drive/MyDatasets/dataset C",
+    "_note": "Must contain 'Training Set', 'Validation Set' and 'Testing Set' subfolders of BCIC2020-IV Track 3."
+  },
+  "protocol": {
+    "train_trials_per_subject": 300,
+    "validation_trials_per_subject": 50,
+    "test_trials_per_subject": 50,
+    "n_subjects": 15,
+    "n_classes": 5,
+    "class_names": [
+      "hello",
+      "help me",
+      "stop",
+      "thank you",
+      "yes"
+    ],
+    "train_role": "fits the models",
+    "validation_role": "selects architecture, seed, stopping epoch, feature block, classifier, C, fusion weight",
+    "test_role": "scored exactly once, after every parameter is fixed",
+    "refit_before_test": "selected configuration refit on train+validation (350 trials) using the validation-chosen architecture, seed and epoch"
+  },
+  "seeds": {
+    "global": 20265732,
+    "deep": [
+      0,
+      1,
+      2
+    ],
+    "reve": 42,
+    "graph_split": 777
+  },
+  "stage1_signal_conditioning": {
+    "sampling_rate_hz": 256,
+    "load_window_ms": [
+      -500,
+      2000
+    ],
+    "baseline_window_ms": [
+      -500,
+      0
+    ],
+    "notch_hz": [
+      60,
+      120
+    ],
+    "notch_q": 30,
+    "bandpass_hz": [
+      1,
+      70
+    ],
+    "bandpass_order": 4,
+    "spatial_reference": "common average",
+    "final_window_ms": [
+      0,
+      2000
+    ],
+    "final_samples": 513,
+    "channel_normalisation": "z-score per channel, training statistics only"
+  },
+  "stage1_quality_control": {
+    "severe_criteria": [
+      "NaN or Inf present",
+      "ADC saturation"
+    ],
+    "adc_clip_level": 16384.0,
+    "adc_clip_eps": 2.0,
+    "threshold_quantile": 0.999,
+    "small_sample_floor": "1 - 2/n, capped below at 0.99",
+    "mad_caps": {
+      "max_abs": 12.0,
+      "p99_abs": 12.0,
+      "rms": 10.0,
+      "drift": 10.0
+    },
+    "train_policy": "hybrid: drop severe, winsorise the remainder",
+    "winsorize_scale": 1.0,
+    "validation_test_policy": "winsorise only, never remove",
+    "duplicate_detection": {
+      "hash": "SHA-1 of quantised waveform",
+      "downsample": 5,
+      "quantisation": 1e-06
+    }
+  },
+  "stage2_mdrg": {
+    "regions": 18,
+    "channels_assigned": 60,
+    "channels_recorded": 64,
+    "unassigned_channels": [
+      "FT9",
+      "FT10",
+      "TP7",
+      "TP8"
+    ],
+    "bands_hz": {
+      "theta": [
+        4,
+        8
+      ],
+      "alpha": [
+        8,
+        13
+      ],
+      "beta": [
+        13,
+        30
+      ],
+      "lgamma": [
+        30,
+        45
+      ]
+    },
+    "filter": "4th-order Butterworth, second-order sections, zero-phase",
+    "windows_ms": {
+      "early": [
+        0,
+        1000
+      ],
+      "late": [
+        1000,
+        2000
+      ]
+    },
+    "window_convention": "closed on both endpoints; 257 samples each; the midpoint sample j=256 is shared",
+    "covariance_shrinkage_alpha": 0.1,
+    "tangent_reference": "log-Euclidean mean over training trials, per band and window",
+    "tangent_vectorisation": "upper triangle, off-diagonal scaled by sqrt(2), 171 coefficients",
+    "graph_eigenvalues": 6,
+    "graph_extra_stats": [
+      "mean degree",
+      "degree SD",
+      "spectral entropy"
+    ],
+    "epsilon": 1e-09,
+    "feature_repair": "training-column median imputation, then clipping to training 0.1 and 99.9 percentiles; degenerate columns widened by 1e-8. No column is ever removed; D stays 1656.",
+    "total_dimensions": 1656
+  },
+  "raw_branch_eegnetlite": {
+    "input": "1 x 64 x 513",
+    "temporal": "Conv2d(1,16,(1,33),padding=(0,16),bias=False) + BatchNorm2d(16)",
+    "spatial": "Conv2d(16,32,(64,1),groups=16,bias=False) + BatchNorm2d(32) + ELU + AvgPool(1,4) + Dropout",
+    "separable": "Conv2d(32,32,(1,17),padding=(0,8),groups=32,bias=False) + Conv2d(32,64,(1,1),bias=False) + BatchNorm2d(64) + ELU + AvgPool(1,4) + Dropout",
+    "head": "AdaptiveAvgPool2d(1,1) + Flatten + Linear(64,5)",
+    "dropout": 0.35
+  },
+  "raw_branch_conformerlite": {
+    "temporal": "Conv2d(1,32,(1,25),padding=(0,12),bias=False) + BatchNorm2d(32)",
+    "spatial": "Conv2d(32,64,(64,1),groups=32,bias=False) + BatchNorm2d(64) + ELU + AvgPool(1,4) + Dropout",
+    "embedding": 64,
+    "encoder_layers": 2,
+    "heads": 4,
+    "feedforward": 192,
+    "activation": "gelu",
+    "norm_first": true,
+    "dropout": 0.3
+  },
+  "mdrg_branch_mlp": {
+    "layer_widths": [
+      1656,
+      1024,
+      512,
+      256,
+      5
+    ],
+    "hidden_block": "Linear + LayerNorm + GELU + Dropout",
+    "dropout": 0.3,
+    "feature_standardisation": "z-score per column, training statistics only"
+  },
+  "optimisation": {
+    "optimiser": "AdamW",
+    "weight_decay": 0.00015,
+    "learning_rate": 0.001,
+    "scheduler": "CosineAnnealingLR",
+    "batch_size": 32,
+    "max_epochs": 90,
+    "early_stopping_patience": 15,
+    "early_stopping_metric": "validation macro-F1",
+    "gradient_clip_norm": 1.0,
+    "label_smoothing": 0.05,
+    "mixup_alpha": 0.25,
+    "determinism": "cudnn.deterministic=True, cudnn.benchmark=False"
+  },
+  "fusion": {
+    "rule": "single global mixture of calibrated class posteriors",
+    "equation": "p_fuse = w * p_raw + (1 - w) * p_mdrg",
+    "weight_grid": "41 uniform points on [0, 1]",
+    "selection_metric": "macro-F1 on the official validation split",
+    "note": "One scalar shared across all five classes. This replaces the earlier five per-class weights plus two branch temperatures, which was too large a search for 50 validation trials."
+  },
+  "mdrg_model_selection": {
+    "blocks_searched": [
+      "Full",
+      "Riemannian",
+      "RiemannianGraph",
+      "SpectralDynamic"
+    ],
+    "logistic_regression_C": [
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "rbf_svm_C": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "svm_gamma": "scale",
+    "selection_metric": "macro-F1 on the official validation split"
+  },
+  "graph_comparator": {
+    "views": [
+      "spectral + dynamic",
+      "Riemannian tangent",
+      "graph spectra"
+    ],
+    "weight_simplex_step": 0.25,
+    "gammas": [
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "k_neighbours": [
+      10,
+      20
+    ],
+    "note": "Adaptation of the multi-view consensus-graph principle, not a bit-for-bit reproduction: the public implementation selects parameters using evaluation-set labels, which is incompatible with this protocol. Here the validation split alone selects the parameters."
+  },
+  "statistics": {
+    "test": "paired Wilcoxon signed-rank across the 15 participants",
+    "effect_size": "matched-pairs rank-biserial correlation",
+    "confidence_intervals": "95% percentile bootstrap over subject-level values",
+    "multiple_comparison_correction": "Holm, within the family of macro-F1 comparisons against the proposed fusion"
+  }
+}
