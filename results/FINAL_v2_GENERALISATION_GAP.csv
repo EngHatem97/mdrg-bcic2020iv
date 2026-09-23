@@ -1,0 +1,5 @@
+system,validation_macro_f1_mean,validation_macro_f1_std,test_macro_f1_mean,test_macro_f1_std,absolute_drop,relative_drop_pct,participants_declining
+Proposed fusion,0.4351,0.065,0.2736,0.0718,0.1616,37.1,15
+Raw EEG,0.4067,0.0755,0.2685,0.0525,0.1383,34.0,15
+Graph comparator,0.358,0.0373,0.2432,0.0642,0.1148,32.1,14
+MDRG branch,0.3475,0.0765,0.26,0.0612,0.0875,25.2,12
