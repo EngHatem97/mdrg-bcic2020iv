@@ -36,13 +36,17 @@
       "FC6"
     ],
     "L_Temporal": [
+      "FT9",
       "FT7",
       "T7",
+      "TP7",
       "TP9"
     ],
     "R_Temporal": [
+      "FT10",
       "FT8",
       "T8",
+      "TP8",
       "TP10"
     ],
     "Central": [
@@ -97,13 +101,8 @@
       "PO10"
     ]
   },
-  "unassigned_channels": [
-    "FT9",
-    "FT10",
-    "TP7",
-    "TP8"
-  ],
-  "n_assigned": 60,
+  "unassigned_channels": [],
+  "n_assigned": 64,
   "n_recorded": 64,
-  "note": "The 18 regions are disjoint and cover 60 of the 64 recorded channels. The four unassigned channels feed the raw EEG branch, which uses all 64, but not the MDRG branch."
+  "note": "The corrected Stage-2 extractor assigns all 64 recorded channels to the 18 regions. An earlier extractor left FT9, FT10, TP7 and TP8 unassigned and covered only 60 channels; feature matrices from that version are not interchangeable with these."
 }
